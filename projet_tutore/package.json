@@ -1,12 +1,22 @@
 {
   "name": "projet_tutore",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "start": "node app.js"
   },
   "dependencies": {
-    "express": "3.2.6",
+    "express": "~3.2.6",
+    "socket.io": "~2.0.4",
     "ejs": "*"
-  }
+  },
+  "contributors": [
+    "Martin ALLERME",
+    "Luca BENEZIT",
+    "Xavier GARCIA",
+    "Jean-Pierre GUIRAUD",
+    "Simon JAYET",
+    "Christopher TAILLANDIER"
+  ],
+  "description": "Outil de diffusion d'information dans le cadre du projet tutoré N°6, année 2017/2018, IUT Informatique d'Arles, ayant pour objectif de simplifier la création et l'affichage de contenu sur les afficheurs de l'IUT."
 }

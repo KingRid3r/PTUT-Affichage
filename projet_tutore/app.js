@@ -1,35 +1,46 @@
 
-/**
- * Module dependencies.
- */
+// Modules dépendances
+var express = require('express'),
+	app = express(),
+	server = require('http').createServer(app),
+	path = require('path'),
+	io = require('socket.io')(server);
 
-var express = require('express')
-  , routes = require('./routes')
-  , user = require('./routes/user')
-  , http = require('http')
-  , path = require('path');
+//Routes
+var routes = require('./routes'),
+	user = require('./routes/user');
 
-var app = express();
+// Environnements Express
+app.set('port', process.env.PORT || 3000)
+.set('views', __dirname + '/views')
+.set('view engine', 'ejs')
+.use(express.favicon())
+.use(express.logger('dev'))
+.use(express.bodyParser())
+.use(express.methodOverride())
+.use(app.router)
+.use(express.static(path.join(__dirname, 'public')));
 
-// all environments
-app.set('port', process.env.PORT || 3000);
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
-app.use(express.favicon());
-app.use(express.logger('dev'));
-app.use(express.bodyParser());
-app.use(express.methodOverride());
-app.use(app.router);
-app.use(express.static(path.join(__dirname, 'public')));
-
-// development only
+// Développement uniquement
 if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
+	app.use(express.errorHandler());
 }
 
-app.get('/', routes.index);
-app.get('/users', user.list);
+app.get('/', routes.index)
+.get('/edition', routes.edition)
+.get('/newelement', routes.newelement)
+.get('/users', user.list)
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+.use(function(req, res, next) {
+	if (typeof page == 'undefined') res.redirect('/');
+});
+
+io.sockets.on('connection', function(socket) {
+	//
+})
+
+
+
+server.listen(app.get('port'), function() {
+	console.log('Express server listening on port ' + app.get('port'));
 });

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Edition</title>
+		<link rel="stylesheet" href="/stylesheets/style.css">
+		<link rel="stylesheet" href="/stylesheets/knacss.css">
+	</head>
+
+	<body>
+		<section>
+			<div class="grid-12">
+				<div class="three-quarters">
+					<div class="container w100 navelement">
+						<div class="element"><p>Element</p></div>
+						<div class="element"><p>Element</p></div>
+					</div>
+				</div>
+				<div class="one-quarter">
+					<div class="center w100p">
+						<button onclick="location.href='newelement';" style="height: 100px;">Nouvel élément</button>
+					</div>	
+				</div>
+			</div>
+			<div class="grid-12">
+				<div class="three-quarters">
+					<div class="frame">
+						<div class="example"></div>
+					</div>
+				</div>
+				<div class="one-quarter">
+					<div class="container" style="height: 400px;">
+						<em>Propriétés</em>
+					</div>
+					<div class="center w200p" style="margin-top: 10px;">
+						<div class="center w100p" style="margin-bottom: 5px;">
+							<button class="w100p" id="url">Générer l'URL</button>
+						</div>
+						<input class="w200p" />
+					</div>
+				</div>
+			</div>
+		</section>
+	</body>
+
+	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		var socket = io.connect('http://localhost:3000');
+		//
+	</script>
+
+</html>
