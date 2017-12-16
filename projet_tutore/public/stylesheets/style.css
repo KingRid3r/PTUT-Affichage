@@ -8,24 +8,18 @@ a
 	text-decoration: none;
 }
 
+.part
+{
+	padding: 10px;
+}
+
 .container
 {
 	border: 2px solid black;
 	padding: 5px;
 }
 
-.frame
-{
-	border: 2px solid black;
-	height: 500px;
-}
-
-.three-quarters, .one-quarter
-{
-	padding: 10px;
-}
-
-.navelement
+#navelement
 {
 	height: 100px;
 	display: inline-flex;
@@ -33,27 +27,71 @@ a
 	overflow: auto;
 }
 
-.element
+#navelement > div
 {
 	width: 86px;
 	height: 86px;
-	background-color: #888888;
-	border: 2px solid black;
 	margin-right: 5px;
+	border: 2px solid black;
+	padding: 5px;
+	background-color: #888888;
 }
 
-.element:last-child
+#navelement >div:last-child
 {
 	margin-right: 0;
 }
 
-.example
+#newelement > button
+{
+	height: 100px;
+}
+
+#frame
 {
 	position: relative;
-	left: 50px;
-	top: 50px;
+	border: 2px solid black;
+	height: 500px;
+}
+
+.object
+{
+	outline: none;
+	position: absolute;
 	width: 50px;
 	height: 50px;
 	background-color: #888888;
-	border: 2px solid black;
+}
+
+#example1
+{
+	left: 50px;
+	top: 50px;
+}
+
+#example2
+{
+	left: 25px;
+	top: 25px;
+}
+
+#lel
+{
+	left: 100px;
+	top: 100px;
+}
+
+#properties
+{
+	height: 400px;
+}
+
+#generate
+{
+	margin-top: 10px;
+}
+
+#generate > div
+{
+	margin-bottom: 5px;
 }

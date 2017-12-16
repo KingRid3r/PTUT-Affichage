@@ -11,46 +11,143 @@
 	</head>
 
 	<body>
+
 		<section>
+
+
+
 			<div class="grid-12">
-				<div class="three-quarters">
-					<div class="container w100 navelement">
-						<div class="element"><p>Element</p></div>
-						<div class="element"><p>Element</p></div>
+
+
+				<div class="three-quarters part">
+
+					<div class="container w100" id="navelement">
+						<div><p>Element</p></div>
+						<div><p>Element</p></div>
 					</div>
+
 				</div>
-				<div class="one-quarter">
-					<div class="center w100p">
-						<button onclick="location.href='newelement';" style="height: 100px;">Nouvel élément</button>
-					</div>	
+
+				<div class="one-quarter part">
+
+					<div class="center w100p" id="newelement">
+						<button onclick="location.href='newelement';">Nouvel élément</button>
+					</div>
+
 				</div>
+
+
 			</div>
+
+
+
 			<div class="grid-12">
-				<div class="three-quarters">
-					<div class="frame">
-						<div class="example"></div>
+
+
+				<div class="three-quarters part">
+					<div id="frame">
+						<div class="object" id="example1"></div>
+						<div class="object" id="example2"></div>
 					</div>
 				</div>
-				<div class="one-quarter">
-					<div class="container" style="height: 400px;">
+
+
+				<div class="one-quarter part">
+
+					<div class="container" id="properties">
 						<em>Propriétés</em>
 					</div>
-					<div class="center w200p" style="margin-top: 10px;">
-						<div class="center w100p" style="margin-bottom: 5px;">
-							<button class="w100p" id="url">Générer l'URL</button>
-						</div>
-						<input class="w200p" />
+
+					<div class="center w200p" id="generate">					<div class="center w100p"><button class="center w100p">Générer l'URL</button></div>
+						<input class="w100" />
 					</div>
+
 				</div>
+
+
 			</div>
+
+
+
 		</section>
+
 	</body>
 
-	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
+
+		//Connexion socket.io
 		var socket = io.connect('http://localhost:3000');
-		//
+
+		//Détermine si le clic de la souris est enfoncé ou non (0 ou 1)
+		var mousedown = 0;
+		//Garde en mémoire la position de la souris actuelle
+		var posMouse = [];
+		//Garde en mémoire les éléments de la scène sélectionnés
+		var selected = [];
+
+		var frame = document.getElementById("frame");
+
+		frame.onmousedown = function(event) {
+			mousedown = 1;
+			posMouse = [event.pageX, event.pageY];
+			selectElements(event);
+		}
+
+		frame.onmouseup = function() {
+			mousedown = 0;
+		}
+
+		frame.onmousemove = function() {
+			if(mousedown)
+				moveElements(event);
+			posMouse = [event.pageX, event.pageY];
+		}
+
+		//Sélection d'un ou plusieurs éléments. Lorsqu'un élément est sélectionné, il est en avant-plan avec une bordure.
+		function selectElements(event)
+		{
+			var elmnt = document.elementFromPoint(event.pageX, event.pageY);
+
+			//La touche alt sert à la multi-sélection. Si elle n'est pas enfoncée
+			if(!event.altKey)
+			{
+				//On désélectionne tous les éléments.
+				for(var i = 0; i < selected.length; i++)
+				{
+					selected[i].style.border = "0px";
+					selected[i].style.zIndex = selected[i].style.zIndex.substring(3);
+				}
+				selected = [];	
+			}
+
+			//S'il y a un élément sous la souris, on le sélectionne.
+			if(elmnt != document.getElementById("frame"))
+			{
+				elmnt.style.border = "2px solid purple";
+				elmnt.style.zIndex = "100" + elmnt.style.zIndex;
+				selected[selected.length] = elmnt;
+			}
+		}
+
+		//Déplacement des éléments sélectionnés.
+		function moveElements(event)
+		{
+			//Grâce à la différence entre l'ancienne et la nouvelle position de la souris
+			xmove = event.pageX - posMouse[0];
+			ymove = event.pageY - posMouse[1];
+			//On déplace tous les éléments sélectionnés
+			for(var i = 0; i < selected.length; i++)
+			{
+				var style = window.getComputedStyle(selected[i]),
+					left = parseInt(style.getPropertyValue('left')),
+					top = parseInt(style.getPropertyValue('top'));
+				selected[i].style.left = left + xmove + "px";
+				selected[i].style.top = top + ymove + "px";
+			}
+		}
+		//Bug identifié : Lorsque alt est maintenu et qu'un élément est déplacé, il se déplace x fois trop, x correspondant au nombre de fois où on a cliqué dessus.
+
 	</script>
 
 </html>
