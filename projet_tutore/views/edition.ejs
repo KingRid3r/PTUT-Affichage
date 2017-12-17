@@ -108,21 +108,30 @@
 		function selectElements(event)
 		{
 			var elmnt = document.elementFromPoint(event.pageX, event.pageY);
+			var is_selected = false;
 
-			//La touche alt sert à la multi-sélection. Si elle n'est pas enfoncée
-			if(!event.altKey)
+			//La touche alt sert à la multi-sélection.
+			if(event.altKey)
 			{
-				//On désélectionne tous les éléments.
+				//Si elle est enfoncée on vérifie que l'élement sous la souris n'est pas déjà sélectionné.
+				var i = 0;
+				while(!is_selected && i < selected.length)
+					if(elmnt == selected[i++])
+						is_selected = true;
+			}
+			else
+			{
+				//Sinon on désélectionne tous les éléments.
 				for(var i = 0; i < selected.length; i++)
 				{
 					selected[i].style.border = "0px";
 					selected[i].style.zIndex = selected[i].style.zIndex.substring(3);
 				}
-				selected = [];	
+				selected = [];
 			}
 
 			//S'il y a un élément sous la souris, on le sélectionne.
-			if(elmnt != document.getElementById("frame"))
+			if(elmnt != document.getElementById("frame") && !is_selected)
 			{
 				elmnt.style.border = "2px solid purple";
 				elmnt.style.zIndex = "100" + elmnt.style.zIndex;
