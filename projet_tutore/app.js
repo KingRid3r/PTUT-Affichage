@@ -30,6 +30,7 @@ app.get('/', routes.index)
 .get('/edition', routes.edition)
 .get('/newelement', routes.newelement)
 .get('/users', user.list)
+.get('/afficheur', routes.afficheur)
 
 .use(function(req, res, next) {
 	if (typeof page == 'undefined') res.redirect('/');

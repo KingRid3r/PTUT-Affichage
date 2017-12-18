@@ -11,6 +11,11 @@ exports.edition = function(req, res) {
 	res.render('edition');
 }
 
+exports.afficheur = function(req, res) {
+	var page = true;
+	res.render('afficheur');
+}
+
 exports.newelement = function(req, res) {
 	var page = true;
 	res.render('newelement');

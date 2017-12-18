@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Edition</title>
+		<link rel="stylesheet" href="/stylesheets/style.css">
+		<link rel="stylesheet" href="/stylesheets/knacss.css">
+	</head>
+	<body>
+	<script src="jquery.js"></script>
+    	<h2>Lecture et parsing du fichier stockages.json</h2>
+    	<button id="lecture">Lancer la lecture</button>
+    <div id="zone"></div>
+    <script>
+    $(function() {
+        $('#lecture').on('click', function(){
+			$.getJSON('stockage.json',function(data){
+  				$('#zone').append('Messages de la régi : ' + data.Element + '<br>');
+			});
+		 });
+	 });
+	
+	</script>
+	
+	</body>
+	
+</html>
