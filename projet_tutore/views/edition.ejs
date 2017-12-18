@@ -22,8 +22,8 @@
 				<div class="three-quarters part">
 
 					<div class="container w100" id="navelement">
-						<div><p>Element</p></div>
-						<div><p>Element</p></div>
+						<div><p>Texte</p></div>
+						<div><p>Image</p></div>
 					</div>
 
 				</div>
@@ -46,8 +46,6 @@
 
 				<div class="three-quarters part">
 					<div id="frame">
-						<div class="object" id="example1"></div>
-						<div class="object" id="example2"></div>
 					</div>
 				</div>
 
@@ -58,7 +56,7 @@
 						<em>Propriétés</em>
 					</div>
 
-					<div class="center w200p" id="generate">					<div class="center w100p"><button class="center w100p">Générer l'URL</button></div>
+					<div class="center w200p" id="generate">					<div class="center w100p"><button class="w100p">Générer l'URL</button></div>
 						<input class="w100" />
 					</div>
 
@@ -87,6 +85,11 @@
 		var selected = [];
 
 		var frame = document.getElementById("frame");
+		var navelement = document.getElementById("navelement");
+
+		navelement.onclick = function() {
+			addElement(event);
+		}
 
 		frame.onmousedown = function(event) {
 			mousedown = 1;
@@ -104,11 +107,43 @@
 			posMouse = [event.pageX, event.pageY];
 		}
 
+		//Crée un nouvel élément à partir de la sélection dans la barre des éléments
+		function addElement(event)
+		{
+			var elmnt = document.elementFromPoint(event.pageX, event.pageY);
+
+			if (elmnt != document.getElementById("navelement"))
+			{
+				var newElmnt = document.createElement("div");
+				newElmnt.className = "element";
+				var frameStyle = window.getComputedStyle(frame),
+					frameWidth = parseInt(frameStyle.getPropertyValue('width')),
+					frameHeight = parseInt(frameStyle.getPropertyValue('height')),
+				//Configuration exemple, à remplacer par des données tirées du JSON
+					width = 50,
+					height = 50;
+				newElmnt.innerHTML = "<p>" + elmnt.innerHTML + "</p>";
+
+				newElmnt.style.backgroundColor = "#888888";
+				//L'élément se positionne par défaut au milieu de la scène.
+				newElmnt.style.left = (frameWidth/2 - width/2) + "px";
+				newElmnt.style.top = (frameHeight/2 - height/2) + "px";
+				newElmnt.style.width = width + "px";
+				newElmnt.style.height = height + "px";
+				newElmnt.style.position = "absolute";
+				frame.appendChild(newElmnt);
+			}
+		}
+
 		//Sélection d'un ou plusieurs éléments. Lorsqu'un élément est sélectionné, il est en avant-plan avec une bordure.
 		function selectElements(event)
 		{
 			var elmnt = document.elementFromPoint(event.pageX, event.pageY);
 			var is_selected = false;
+			//On cherche à sélectionner un élément de la scène. Si l'on clique sur un de ses enfants, on remonte jusqu'à trouver l'élément dans sa globalité.
+			if(elmnt != document.getElementById("frame"))
+				while(elmnt.className != "element")
+					elmnt = elmnt.parentElement;
 
 			//La touche alt sert à la multi-sélection.
 			if(event.altKey)
@@ -155,7 +190,6 @@
 				selected[i].style.top = top + ymove + "px";
 			}
 		}
-		//Bug identifié : Lorsque alt est maintenu et qu'un élément est déplacé, il se déplace x fois trop, x correspondant au nombre de fois où on a cliqué dessus.
 
 	</script>
 
