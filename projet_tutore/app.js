@@ -1,10 +1,14 @@
-
 // Modules dépendances
 var express = require('express'),
 	app = express(),
 	server = require('http').createServer(app),
 	path = require('path'),
+	fs = require('fs'),
 	io = require('socket.io')(server);
+
+let rawdata = fs.readFileSync('elements.json');  
+let elements = JSON.parse(rawdata);
+console.log(elements);
 
 //Routes
 var routes = require('./routes'),

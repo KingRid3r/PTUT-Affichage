@@ -10,7 +10,7 @@
 		<link rel="stylesheet" href="/stylesheets/knacss.css">
 	</head>
 
-	<body>
+	<body onresize="display()" onload="display()">
 
 		<section>
 
@@ -57,7 +57,7 @@
 					</div>
 
 					<div class="center w200p" id="generate">
-							<div class="center w100p"><button oneclick="location.href='afficheur';" class="w100p">Générer l'URL</button></div>
+							<div class="center w100p"><button class="w100p">Générer l'URL</button></div>
 						<input class="w100" />
 					</div>
 
@@ -76,17 +76,37 @@
 	<script>
 
 		//Connexion socket.io
-		var socket = io.connect('http://localhost:3000');
+		var socket = io.connect('http://localhost:3000'),
 
 		//Détermine si le clic de la souris est enfoncé ou non (0 ou 1)
-		var mousedown = 0;
+			mousedown = 0,
 		//Garde en mémoire la position de la souris actuelle
-		var posMouse = [];
-		//Garde en mémoire les éléments de la scène sélectionnés
-		var selected = [];
+			posMouse = [],
+		//Garde en mémoire les éléments (plus tard on chargera un json)
+			elements = {},
+		//Garde en mémoire les éléments sélectionnés, permet d'éviter de parcourir la liste d'éléments à chaque sélection.
+			selected = [],
 
-		var frame = document.getElementById("frame");
-		var navelement = document.getElementById("navelement");
+			navelement = document.getElementById("navelement"),
+
+			frame = document.getElementById("frame"), 
+			frameWidth,
+			frameHeight,
+			coeff1080p,
+
+			properties = document.getElementById("properties");
+
+		alert(elements.name);
+
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var myObj = JSON.parse(this.responseText);
+				alert(myObj.name);
+			}
+		};
+		xmlhttp.open("GET", "test.txt", true);
+		xmlhttp.send();
 
 		navelement.onclick = function() {
 			addElement(event);
@@ -94,7 +114,7 @@
 
 		frame.onmousedown = function(event) {
 			mousedown = 1;
-			posMouse = [event.pageX, event.pageY];
+			posMouse = [event.clientX, event.clientY];
 			selectElements(event);
 		}
 
@@ -105,33 +125,64 @@
 		frame.onmousemove = function() {
 			if(mousedown)
 				moveElements(event);
-			posMouse = [event.pageX, event.pageY];
+			posMouse = [event.clientX, event.clientY];
+		}
+
+		//A chaque fois que la fenêtre est redimensionnée, le cadre de la scène ainsi que tous les éléments doivent être redimensionnés eux aussi.
+		function display() {
+			var frameStyle = window.getComputedStyle(frame);
+			frameWidth = parseInt(frameStyle.getPropertyValue('width'));
+			frame.style.height = parseInt((frameWidth/16*9)) + "px"; 
+			frameHeight = parseInt(frameStyle.getPropertyValue('height'));
+
+			coeff1080p = frameWidth/1920;
+
+			for(var i = 0; i < Object.keys(elements).length; i++)
+			{
+				displayElement(i);
+			}
+		}
+
+		function displayElement(id)
+		{
+			var e = document.getElementById(id);
+			e.style.width = (elements[id].width * coeff1080p) + "px";
+			e.style.height = (elements[id].height * coeff1080p) + "px";
+			e.style.left = (elements[id].left * coeff1080p) + "px";
+			e.style.top = (elements[id].top * coeff1080p) + "px";
 		}
 
 		//Crée un nouvel élément à partir de la sélection dans la barre des éléments
 		function addElement(event)
 		{
-			var elmnt = document.elementFromPoint(event.pageX, event.pageY);
+			var elmnt = document.elementFromPoint(event.clientX, event.clientY);
 
 			if (elmnt != document.getElementById("navelement"))
 			{
 				var newElmnt = document.createElement("div");
 				newElmnt.className = "element";
-				var frameStyle = window.getComputedStyle(frame),
-					frameWidth = parseInt(frameStyle.getPropertyValue('width')),
-					frameHeight = parseInt(frameStyle.getPropertyValue('height')),
-				//Configuration exemple, à remplacer par des données tirées du JSON
-					width = 50,
-					height = 50;
-				newElmnt.innerHTML = "<p>" + elmnt.innerHTML + "</p>";
 
-				newElmnt.style.backgroundColor = "#888888";
-				//L'élément se positionne par défaut au milieu de la scène.
-				newElmnt.style.left = (frameWidth/2 - width/2) + "px";
-				newElmnt.style.top = (frameHeight/2 - height/2) + "px";
-				newElmnt.style.width = width + "px";
-				newElmnt.style.height = height + "px";
+				//L'id de l'élément permettra un accès direct à celui-ci. Il est simplement défini par le nombre d'items du JSON, pourra être changé au besoin par la suite.
+				newElmnt.id = Object.keys(elements).length;
+
+				//Configuration exemple
+				var width = 200,
+					height = 200,
+					left = 1920/2 - width/2,
+					top = 1080/2 - height/2,
+					backgroundColor = "#888888",
+					innerHTML = "<div>" + elmnt.innerHTML + "</div>";
+
+				elements[newElmnt.id] = {"selected": false, "width": width, "height": height, "left": left, "top": top, "zIndex": newElmnt.id, "backgroundColor": backgroundColor, "innerHTML": innerHTML};
+
 				newElmnt.style.position = "absolute";
+				newElmnt.style.width = (elements[newElmnt.id].width * coeff1080p) + "px";
+				newElmnt.style.height = (elements[newElmnt.id].height * coeff1080p) + "px";
+				newElmnt.style.left = (elements[newElmnt.id].left * coeff1080p) + "px";
+				newElmnt.style.top = (elements[newElmnt.id].top * coeff1080p) + "px";
+				newElmnt.style.backgroundColor = backgroundColor;
+				newElmnt.innerHTML = innerHTML;
+
 				frame.appendChild(newElmnt);
 			}
 		}
@@ -139,39 +190,74 @@
 		//Sélection d'un ou plusieurs éléments. Lorsqu'un élément est sélectionné, il est en avant-plan avec une bordure.
 		function selectElements(event)
 		{
-			var elmnt = document.elementFromPoint(event.pageX, event.pageY);
-			var is_selected = false;
-			//On cherche à sélectionner un élément de la scène. Si l'on clique sur un de ses enfants, on remonte jusqu'à trouver l'élément dans sa globalité.
-			if(elmnt != document.getElementById("frame"))
-				while(elmnt.className != "element")
-					elmnt = elmnt.parentElement;
+			var elmnt = document.elementFromPoint(event.clientX, event.clientY);
 
-			//La touche alt sert à la multi-sélection.
-			if(event.altKey)
+			//La touche alt sert à la multi-sélection. Si elle n'est pas enfoncée, on désélectionne tous les éléments.
+			if(!event.altKey)
 			{
-				//Si elle est enfoncée on vérifie que l'élement sous la souris n'est pas déjà sélectionné.
-				var i = 0;
-				while(!is_selected && i < selected.length)
-					if(elmnt == selected[i++])
-						is_selected = true;
-			}
-			else
-			{
-				//Sinon on désélectionne tous les éléments.
 				for(var i = 0; i < selected.length; i++)
 				{
+					elements[selected[i].id].selected = false;
 					selected[i].style.border = "0px";
-					selected[i].style.zIndex = selected[i].style.zIndex.substring(3);
 				}
+
 				selected = [];
 			}
 
-			//S'il y a un élément sous la souris, on le sélectionne.
-			if(elmnt != document.getElementById("frame") && !is_selected)
+			//On cherche à sélectionner un élément de la scène. Si l'on clique sur un de ses enfants, on remonte jusqu'à trouver l'élément dans sa globalité.
+			if(!(elmnt == document.getElementById("frame")))
 			{
-				elmnt.style.border = "2px solid purple";
-				elmnt.style.zIndex = "100" + elmnt.style.zIndex;
-				selected[selected.length] = elmnt;
+				while(elmnt.className != "element")
+					elmnt = elmnt.parentElement;
+
+				//S'il y a un élément sous la souris qui n'est pas déjà sélectionné, on le sélectionne.
+				if(!elements[elmnt.id].selected)
+				{
+					elements[elmnt.id].selected = true;
+					elmnt.style.border = "2px solid purple";
+					alert(elmnt.style.zIndex);
+
+					selected[selected.length] = elmnt;
+				}
+			}
+
+			displayProperties();
+		}
+
+		//Dès que la liste d'éléments sélectionnés change, on appelle cette fonction qui affiche les propriétés de l'élément sélectionné. Lors d'une multi-sélection, seules les propriétés communes sont affichées.
+		function displayProperties()
+		{
+			//On retire tout du panneau des propriétés pour l'actualiser
+			while (properties.hasChildNodes()) 
+    			properties.removeChild(properties.firstChild);
+
+    		//Pour le moment on ne traite que le cas mono-sélection
+			if(selected.length == 1)
+			{
+				var keylist = Object.keys(elements[selected[0].id]);
+				for(var i = 1; i < keylist.length; i++)
+				{
+					var input = document.createElement("div");
+					input.innerHTML = "<label>" + keylist[i] + "</label> <input id='" + keylist[i] + "' value='" + elements[selected[0].id][keylist[i]] + "'oninput='modifyElements(this.id, this.value)'/>";
+					properties.appendChild(input);
+				}
+			}
+			else
+			{
+				var prop = document.createElement("em");
+				prop.innerHTML = "Propriétés";
+				properties.appendChild(prop);
+			}
+		}
+
+		//Modification d'une propriété que l'on veut de l'élément sélectionné
+		function modifyElements(property, value)
+		{
+			for(var i = 0; i < selected.length; i++)
+			{
+				elements[selected[i].id][property] = value;
+				selected[i].style[property] = value;
+				displayElement(selected[i].id);
 			}
 		}
 
@@ -179,16 +265,26 @@
 		function moveElements(event)
 		{
 			//Grâce à la différence entre l'ancienne et la nouvelle position de la souris
-			xmove = event.pageX - posMouse[0];
-			ymove = event.pageY - posMouse[1];
+			xmove = event.clientX - posMouse[0];
+			ymove = event.clientY - posMouse[1];
+
 			//On déplace tous les éléments sélectionnés
 			for(var i = 0; i < selected.length; i++)
 			{
+				elements[selected[i].id].left += xmove / coeff1080p;
+				elements[selected[i].id].top += ymove / coeff1080p;
+
 				var style = window.getComputedStyle(selected[i]),
 					left = parseInt(style.getPropertyValue('left')),
 					top = parseInt(style.getPropertyValue('top'));
 				selected[i].style.left = left + xmove + "px";
 				selected[i].style.top = top + ymove + "px";
+
+				if(selected.length == 1)
+				{
+					document.getElementById("left").value = parseInt(elements[selected[i].id].left);
+					document.getElementById("top").value = parseInt(elements[selected[i].id].top);
+				}
 			}
 		}
 
