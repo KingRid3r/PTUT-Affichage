@@ -58,9 +58,24 @@
 
 					<div class="center w200p" id="generate">
 							<div class="center w200p">
-								<button class="w150p" onClick="">Actualiser</button></div>
-								<button class="w150p" onClick="generation">Générer l'URL</button></div>
-						<input class="w200" />
+								<button class="w150p" onclick="">Actualiser</button>
+								<button class="w150p" onclick="">Sauvegarder</button>
+								<button class="w150p" onclick="">Supprimer</button>
+								<button class="w150p" onclick="generation()" id="bp">Générer l'URL</button>
+
+								<textarea id="affichage"> </textarea> 
+
+								<script language="JavaScript" type="text/javascript">
+								function generation() {
+									var variable = ChaineAleatoire();
+									variable = 'localhost:3000/Scene/' + variable;
+									
+									document.getElementById("affichage").innerHTML =  variable ;
+								}
+								</script>
+
+							</div>
+						
 					</div>
 
 				</div>
@@ -76,6 +91,26 @@
 
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
+
+		var url = function s() {
+
+			var variable = ChaineAleatoire();
+			variable = 'localhost:3000/Scene/' + variable;
+			return url;
+			
+		}
+
+
+			var ChaineAleatoire = function ChaineAleatoire()
+			{
+				var ListeCar = new Array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","0","1","2","3","4","5","6","7","8","9");
+				var Chaine ='';
+				for(i = 0; i < 10; i++)
+				{
+					Chaine = Chaine + ListeCar[Math.floor(Math.random()*ListeCar.length)];
+				}
+				return Chaine;
+			}
 
 		//Connexion socket.io
 		var socket = io.connect('http://localhost:3000'),

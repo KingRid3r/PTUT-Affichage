@@ -6,9 +6,10 @@
     "start": "node app.js"
   },
   "dependencies": {
+    "ejs": "*",
     "express": "~3.2.6",
-    "socket.io": "~2.0.4",
-    "ejs": "*"
+    "rand-token": "^0.4.0",
+    "socket.io": "~2.0.4"
   },
   "contributors": [
     "Martin ALLERME",

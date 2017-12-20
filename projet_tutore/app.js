@@ -4,7 +4,8 @@ var express = require('express'),
 	server = require('http').createServer(app),
 	path = require('path'),
 	fs = require('fs'),
-	io = require('socket.io')(server);
+	uid = require('rand-token').uid,
+	io = require('socket.io').listen(server);
 
 let rawdata = fs.readFileSync('elements.json');  
 let elements = JSON.parse(rawdata);
@@ -35,19 +36,30 @@ app.get('/', routes.index)
 .get('/newelement', routes.newelement)
 .get('/users', user.list)
 .get('/afficheur', routes.afficheur)
+.get('/scene', routes.scene)
+.get('/scene1', routes.scene1)
+.get('/scene2', routes.scene2)
 
 .use(function(req, res, next) {
 	if (typeof page == 'undefined') res.redirect('/');
 });
 
-io.sockets.on('connection', function(socket) {
-	//
-	socket.on('message', function(message) {
-		socket.emit('message', message);
-	})
-})
-
 
 server.listen(app.get('port'), function() {
 	console.log('Le serveur est connectee sur le port ' + app.get('port'));
+});
+
+
+
+io.sockets.on('connection', function (socket, pseudo) {
+    // Dès qu'on nous donne un pseudo, on le stocke en variable de session et on informe les autres personnes
+    socket.on('nouveau_client', function(pseudo) {
+
+        socket.broadcast.emit('nouveau_client', pseudo);
+    });
+
+    // Dès qu'on reçoit un message, on récupère le pseudo de son auteur et on le transmet aux autres personnes
+    socket.on('message', function (message) {
+        socket.broadcast.emit('message', {pseudo: socket.pseudo, message: message});
+    }); 
 });

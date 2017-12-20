@@ -20,3 +20,20 @@ exports.newelement = function(req, res) {
 	var page = true;
 	res.render('newelement');
 }
+
+
+exports.scene1 = function(req, res) {
+	var page = true;
+	res.render('scene1');
+}
+
+exports.scene2 = function(req, res) {
+	var page = true;
+	res.render('scene2');
+}
+
+exports.scene = function(req, res) {
+	var page = true;
+	res.render('scene');
+}
+
