@@ -99,8 +99,6 @@
 			properties = document.getElementById("properties");
 			actualiser = document.getElementById("actualiser");
 
-		alert(elements.name);
-
 		var xmlhttp = new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
@@ -219,7 +217,6 @@
 				{
 					elements[elmnt.id].selected = true;
 					elmnt.style.border = "2px solid purple";
-					alert(elmnt.style.zIndex);
 
 					selected[selected.length] = elmnt;
 				}
