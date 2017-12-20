@@ -12,8 +12,41 @@
 
 	<body>
 
-		<h1>Projet tut</h1>
-		<a href="edition">Edition</a>
+
+		<section>
+
+			<div class = "txtcenter">
+				<h1>Outil de diffusion d'information</h1>
+			</div>
+
+			<div class="grid-12">
+
+				<div style="width: 30%" class="center menu ">
+					
+					<div class="flex-container" style="height: 200px;">
+  					<span class="item-center">
+  						<a href="edition">Edition</a>
+  					</span>
+					</div>
+				</div>
+
+				<div style="width: 30%" class="center menu ">
+					
+					<div class="flex-container" style="height: 200px;">
+  					<span class="item-center">
+  						<a href="Afficheur">Afficheur</a>
+  					</span>
+					</div>
+				</div>
+
+			</div>
+
+		</section>
+
+		<script type="jquery.js"></script>
+		<script>
+		var socket = io.connect("http://localhost:3000");
+		</script>
 
 	</body>
 

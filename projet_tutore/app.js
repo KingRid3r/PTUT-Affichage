@@ -42,10 +42,12 @@ app.get('/', routes.index)
 
 io.sockets.on('connection', function(socket) {
 	//
+	socket.on('message', function(message) {
+		socket.emit('message', message);
+	})
 })
 
 
-
 server.listen(app.get('port'), function() {
-	console.log('Express server listening on port ' + app.get('port'));
+	console.log('Le serveur est connectee sur le port ' + app.get('port'));
 });

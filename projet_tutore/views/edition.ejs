@@ -24,7 +24,7 @@
 					<div class="container w100" id="navelement">
 						<div><p>Texte</p></div>
 						<div><p>Image</p></div>
-					</div>
+					</div><button></button>
 
 				</div>
 
@@ -53,12 +53,14 @@
 				<div class="one-quarter part">
 
 					<div class="container" id="properties">
-						<em>Propriétés</em>
+						<em>Propriétées</em>
 					</div>
 
 					<div class="center w200p" id="generate">
-							<div class="center w100p"><button class="w100p">Générer l'URL</button></div>
-						<input class="w100" />
+							<div class="center w200p">
+								<button class="w150p" onClick="">Actualiser</button></div>
+								<button class="w150p" onClick="generation">Générer l'URL</button></div>
+						<input class="w200" />
 					</div>
 
 				</div>
@@ -95,6 +97,7 @@
 			coeff1080p,
 
 			properties = document.getElementById("properties");
+			actualiser = document.getElementById("actualiser");
 
 		alert(elements.name);
 
@@ -107,6 +110,7 @@
 		};
 		xmlhttp.open("GET", "test.txt", true);
 		xmlhttp.send();
+
 
 		navelement.onclick = function() {
 			addElement(event);
