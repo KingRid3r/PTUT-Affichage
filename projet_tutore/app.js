@@ -46,7 +46,7 @@ app.get('/', routes.index)
 
 
 server.listen(app.get('port'), function() {
-	console.log('Le serveur est connectee sur le port ' + app.get('port'));
+	console.log('Le serveur est connecté sur le port ' + app.get('port'));
 });
 
 

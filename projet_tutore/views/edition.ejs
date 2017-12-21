@@ -70,7 +70,7 @@
 									var variable = ChaineAleatoire();
 									variable = 'localhost:3000/Scene/' + variable;
 									
-									document.getElementById("affichage").innerHTML =  variable ;
+									document.getElementById("affichage").innerHTML =  variable;
 								}
 								</script>
 
@@ -188,12 +188,16 @@
 			e.style.height = (elements[id].height * coeff1080p) + "px";
 			e.style.left = (elements[id].left * coeff1080p) + "px";
 			e.style.top = (elements[id].top * coeff1080p) + "px";
+			e.style.backgroundColor = "#" + elements[id].backgroundColor;
+			e.style.color = "#" + elements[id].color;
+			e.innerHTML = "<p>" + elements[id].innerHTML + "</p>";
 		}
 
 		//Crée un nouvel élément à partir de la sélection dans la barre des éléments
 		function addElement(event)
 		{
 			var elmnt = document.elementFromPoint(event.clientX, event.clientY);
+			var content = elmnt.childNodes[0].innerHTML;
 
 			if (elmnt != document.getElementById("navelement"))
 			{
@@ -208,18 +212,20 @@
 					height = 200,
 					left = 1920/2 - width/2,
 					top = 1080/2 - height/2,
-					backgroundColor = "#888888",
-					innerHTML = "<div>" + elmnt.innerHTML + "</div>";
+					backgroundColor = "888888",
+					color = "000000",
+					innerHTML = content;
 
-				elements[newElmnt.id] = {"selected": false, "width": width, "height": height, "left": left, "top": top, "zIndex": newElmnt.id, "backgroundColor": backgroundColor, "innerHTML": innerHTML};
+				elements[newElmnt.id] = {"selected": false, "width": width, "height": height, "left": left, "top": top, "zIndex": newElmnt.id, "backgroundColor": backgroundColor, "color": color, "innerHTML": innerHTML};
 
 				newElmnt.style.position = "absolute";
 				newElmnt.style.width = (elements[newElmnt.id].width * coeff1080p) + "px";
 				newElmnt.style.height = (elements[newElmnt.id].height * coeff1080p) + "px";
 				newElmnt.style.left = (elements[newElmnt.id].left * coeff1080p) + "px";
 				newElmnt.style.top = (elements[newElmnt.id].top * coeff1080p) + "px";
-				newElmnt.style.backgroundColor = backgroundColor;
-				newElmnt.innerHTML = innerHTML;
+				newElmnt.style.backgroundColor = "#" + backgroundColor;
+				newElmnt.style.color = "#" + color;
+				newElmnt.innerHTML = "<p>" + innerHTML + "</p>";
 
 				frame.appendChild(newElmnt);
 			}
@@ -272,15 +278,19 @@
 			if(selected.length == 1)
 			{
 				var keylist = Object.keys(elements[selected[0].id]);
+				properties.style.height = keylist.length * 46 + "px";
+
 				for(var i = 1; i < keylist.length; i++)
 				{
 					var input = document.createElement("div");
-					input.innerHTML = "<label>" + keylist[i] + "</label> <input id='" + keylist[i] + "' value='" + elements[selected[0].id][keylist[i]] + "'oninput='modifyElements(this.id, this.value)'/>";
+					input.innerHTML = "<label>" + keylist[i] + "</label><br /><input class='w100' id='" + keylist[i] + "' value='" + elements[selected[0].id][keylist[i]] + "'oninput='modifyElements(this.id, this.value)'/>";
 					properties.appendChild(input);
 				}
 			}
 			else
 			{
+				properties.style.height = "40px";
+
 				var prop = document.createElement("em");
 				prop.innerHTML = "Propriétés";
 				properties.appendChild(prop);
@@ -292,8 +302,18 @@
 		{
 			for(var i = 0; i < selected.length; i++)
 			{
-				elements[selected[i].id][property] = value;
-				selected[i].style[property] = value;
+				switch(property)
+				{
+					case "width":
+					case "height":
+					case "left":
+					case "top":
+						elements[selected[i].id][property] = parseInt(value);
+						break;
+					default:
+						elements[selected[i].id][property] = value;
+						selected[i].style[property] = value;
+				}
 				displayElement(selected[i].id);
 			}
 		}
