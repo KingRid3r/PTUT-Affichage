@@ -3,7 +3,7 @@
 	box-sizing: border-box;
 }
 
-::selection
+.frame ::selection
 {
 	background: rgba(0,0,0,0);
 }
