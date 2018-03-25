@@ -8,9 +8,10 @@
 		<title>Edition</title>
 		<link rel="stylesheet" href="/stylesheets/style.css">
 		<link rel="stylesheet" href="/stylesheets/knacss.css">
+		
 	</head>
 
-	<body onresize="display()" onload="display()">
+	<body class="gris" onresize="display()" onload="display()">
 
 		<section>
 
@@ -21,7 +22,7 @@
 
 				<div class="three-quarters part">
 
-					<div class="container w100" id="navelement">
+					<div class="container w100 couleur" id="navelement">
 						<div><p>Texte</p></div>
 						<div><p>Image</p></div>
 					</div>
@@ -30,7 +31,7 @@
 
 				<div class="one-quarter part">
 
-					<div class="center w100p" id="newelement">
+					<div class="center w100p white" id="newelement">
 						<button onclick="location.href='newelement';">Nouvel élément</button>
 					</div>
 
@@ -58,10 +59,21 @@
 
 					<div class="center w200p" id="generate">
 							<div class="center w200p">
-								<button class="w150p" onclick="">Actualiser</button>
+								<div>
+									<button class="w150p" onclick="">Actualiser</button>
+								</div>
+								<br/>
+								<div>
 								<button class="w150p" onclick="">Sauvegarder</button>
+								</div>
+								<br/>
+								<div>
 								<button class="w150p" onclick="">Supprimer</button>
+								</div>
+								<br/>
+								<div>
 								<button class="w150p" onclick="generation()" id="bp">Générer l'URL</button>
+								</div>
 
 								<textarea id="affichage"> </textarea> 
 
