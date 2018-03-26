@@ -60,11 +60,11 @@
 					<div class="center w200p" id="generate">
 							<div class="center w200p">
 								<div>
-									<button class="w150p" onclick="">Actualiser</button>
+									<button class="w150p" onclick="sauvegarder()">Actualiser</button>
 								</div>
 								<br/>
 								<div>
-								<button class="w150p" onclick="">Sauvegarder</button>
+								<button class="w150p" onclick="sauvegarder()">Sauvegarder</button>
 								</div>
 								<br/>
 								<div>
@@ -77,14 +77,7 @@
 
 								<textarea id="affichage"> </textarea> 
 
-								<script language="JavaScript" type="text/javascript">
-								function generation() {
-									var variable = ChaineAleatoire();
-									variable = 'localhost:3000/Scene/' + variable;
-									
-									document.getElementById("affichage").innerHTML =  variable;
-								}
-								</script>
+								
 
 							</div>
 						
@@ -99,18 +92,31 @@
 
 		</section>
 
+
+		<script language="JavaScript" type="text/javascript">
+		function generation() {
+			var variable = ChaineAleatoire();
+			variable = 'localhost:3000/Scene/' + variable;
+			
+			document.getElementById("affichage").innerHTML =  variable;
+		}
+		</script>
+
 	</body>
 
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
 
-		var url = function s() {
+		function sauvegarder() {
+			var sav = document.getElementById("frame");
+			console.log(sav)
+			chaineJSON = JSON.stringify(elements);
+			console.log(chaineJSON);
+			localStorage.setItem("stockage", chaineJSON);
 
-			var variable = ChaineAleatoire();
-			variable = 'localhost:3000/Scene/' + variable;
-			return url;
-			
-		}
+
+		} 
+
 
 
 			var ChaineAleatoire = function ChaineAleatoire()
@@ -220,11 +226,11 @@
 				newElmnt.id = Object.keys(elements).length;
 
 				//Configuration exemple
-				var width = 200,
-					height = 200,
+				var width = 500,
+					height = 100,
 					left = 1920/2 - width/2,
 					top = 1080/2 - height/2,
-					backgroundColor = "888888",
+					backgroundColor = "ffffff",
 					color = "000000",
 					innerHTML = content;
 
