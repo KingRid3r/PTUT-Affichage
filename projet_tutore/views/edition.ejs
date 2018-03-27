@@ -107,6 +107,7 @@
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
 
+<<<<<<< Updated upstream
 		function sauvegarder() {
 			var sav = document.getElementById("frame");
 			console.log(sav)
@@ -116,19 +117,23 @@
 
 
 		} 
+=======
+		var url = function s()
+		{
+>>>>>>> Stashed changes
 
 
 
-			var ChaineAleatoire = function ChaineAleatoire()
+		var ChaineAleatoire = function ChaineAleatoire()
+		{
+			var CharList = new Array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","0","1","2","3","4","5","6","7","8","9");
+			var Chaine = '';
+			for(i = 0; i < 10; i++)
 			{
-				var ListeCar = new Array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","0","1","2","3","4","5","6","7","8","9");
-				var Chaine ='';
-				for(i = 0; i < 10; i++)
-				{
-					Chaine = Chaine + ListeCar[Math.floor(Math.random()*ListeCar.length)];
-				}
-				return Chaine;
+				Chaine = Chaine + CharList[Math.floor(Math.random()*CharList.length)];
 			}
+			return Chaine;
+		}
 
 		//Connexion socket.io
 		var socket = io.connect('http://localhost:3000'),
@@ -183,6 +188,8 @@
 				moveElements(event);
 			posMouse = [event.clientX, event.clientY];
 		}
+
+		document.addEventListener("keydown", deleteElements, false);
 
 		//A chaque fois que la fenêtre est redimensionnée, le cadre de la scène ainsi que tous les éléments doivent être redimensionnés eux aussi.
 		function display() {
@@ -243,7 +250,10 @@
 				newElmnt.style.top = (elements[newElmnt.id].top * coeff1080p) + "px";
 				newElmnt.style.backgroundColor = "#" + backgroundColor;
 				newElmnt.style.color = "#" + color;
-				newElmnt.innerHTML = "<p>" + innerHTML + "</p>";
+				if(content == "Texte")
+					newElmnt.innerHTML = "<p>" + innerHTML + "</p>";
+				else if(content == "Image")
+					newElmnt.innerHTML = "<img src='https://upload.wikimedia.org/wikipedia/commons/3/32/Ornithorhynchus.jpg'>";
 
 				frame.appendChild(newElmnt);
 			}
@@ -361,6 +371,15 @@
 					document.getElementById("top").value = parseInt(elements[selected[i].id].top);
 				}
 			}
+		}
+
+		function deleteElements(event)
+		{
+			var keyCode = event.keyCode;
+			if(keyCode == 8)
+				for(var i = 0; i < Object.keys(elements).length; i++)
+					if(elements[i].selected = true)
+						alert('delete');
 		}
 
 	</script>
