@@ -38,6 +38,7 @@ app.get('/', routes.index)
 .get('/scenes', routes.scenes)
 .get('/scene1', routes.scene1)
 .get('/scene2', routes.scene2)
+.get('/scene2', routes.connection)
 
 .use(function(req, res, next) {
 	if (typeof page == 'undefined') res.redirect('/');

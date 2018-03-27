@@ -36,3 +36,8 @@ exports.scenes = function(req, res) {
 	res.render('scenes');
 }
 
+exports.connection = function(req, res) {
+	var page = true;
+	res.render('connection');
+}
+
