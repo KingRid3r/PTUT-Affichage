@@ -1,14 +1,16 @@
 {
-  "fruits": [
-    { "kiwis": 3,
-      "mangues": 4,
-      "pommes": null
+  "users": [
+    { "login": "user1",
+      "password": "usermdp1"
     },
-    { "panier": true }
+    { "login": "user2",
+      "password": "usermdp2"
+    },
   ],
-  "legumes": {
-      "patates": "amandine",
-      "poireaux": false
+
+  "admin": [
+    { "login": "admin1",
+      "password": "adminmdp1"
     },
-    "viandes": ["poisson","poulet","boeuf"]
- }
+  ]
+}
