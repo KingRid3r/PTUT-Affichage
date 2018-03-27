@@ -9,7 +9,6 @@ var express = require('express'),
 
 let rawdata = fs.readFileSync('elements.json');  
 let elements = JSON.parse(rawdata);
-console.log(elements);
 
 //Routes
 var routes = require('./routes'),
@@ -36,7 +35,7 @@ app.get('/', routes.index)
 .get('/newelement', routes.newelement)
 .get('/users', user.list)
 .get('/afficheur', routes.afficheur)
-.get('/scene', routes.scene)
+.get('/scenes', routes.scenes)
 .get('/scene1', routes.scene1)
 .get('/scene2', routes.scene2)
 

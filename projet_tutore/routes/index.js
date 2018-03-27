@@ -1,4 +1,3 @@
-
 // Dirige vers la bonne vue
 
 exports.index = function(req, res) {
@@ -32,8 +31,8 @@ exports.scene2 = function(req, res) {
 	res.render('scene2');
 }
 
-exports.scene = function(req, res) {
+exports.scenes = function(req, res) {
 	var page = true;
-	res.render('scene');
+	res.render('scenes');
 }
 
