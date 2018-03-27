@@ -46,6 +46,7 @@ function connection(){
             if(connect.resultat == "OK"){
               console.log("vous êtes connecté")
               setCookie("connected", "true");
+              document.location.href="http://localhost:3000"
             }
           }else{
             console.log("Erreur indéfinie (peut être n'êtes vous pas connecté a internet)");
